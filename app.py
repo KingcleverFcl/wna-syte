@@ -3,18 +3,27 @@ import random
 import string
 from flask import Flask, render_template, request, redirect, url_for, flash
 import psycopg2
+from psycopg2 import OperationalError
 
 app = Flask(__name__)
-app.secret_key = os.environ['SECRET_KEY']  # Получаем из Railway Variables
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-fallback-key')
+
+# Конфигурация подключения к БД
+def get_db_config():
+    return {
+        'host': os.environ.get('DB_HOST'),
+        'database': os.environ.get('DB_NAME'),
+        'user': os.environ.get('DB_USER'),
+        'password': os.environ.get('DB_PASSWORD'),
+        'port': os.environ.get('DB_PORT', '5432')
+    }
 
 def get_db_connection():
-    return psycopg2.connect(
-        host=os.environ['DB_HOST'],
-        database=os.environ['DB_NAME'],
-        user=os.environ['DB_USER'],
-        password=os.environ['DB_PASSWORD'],
-        port=os.environ.get('DB_PORT', '5432')
-    )
+    try:
+        return psycopg2.connect(**get_db_config())
+    except OperationalError as e:
+        print(f"Database connection error: {e}")
+        raise
 
 def init_db():
     conn = None
@@ -52,7 +61,7 @@ def index():
             return render_template('index.html', code=code)
         except psycopg2.IntegrityError:
             if conn: conn.rollback()
-            flash('Generation error, please try again', 'error')
+            flash('Ошибка генерации, попробуйте снова', 'error')
         finally:
             if conn: conn.close()
     
@@ -60,9 +69,9 @@ def index():
 
 @app.route('/login', methods=['POST'])
 def login():
-    code = (request.form.get('code') or '')[:64]
+    code = request.form.get('code', '')[:64]
     if len(code) != 64:
-        flash('Code must be 64 characters', 'error')
+        flash('Код должен содержать 64 символа', 'error')
         return redirect(url_for('index'))
     
     conn = None
@@ -72,7 +81,7 @@ def login():
             cur.execute('SELECT 1 FROM codes WHERE code = %s', (code,))
             if cur.fetchone():
                 return render_template('success.html', code=code)
-        flash('Invalid code', 'error')
+        flash('Неверный код', 'error')
     finally:
         if conn: conn.close()
     
@@ -80,4 +89,5 @@ def login():
 
 if __name__ == '__main__':
     init_db()
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
