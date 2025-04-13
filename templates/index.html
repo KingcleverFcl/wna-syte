@@ -4,10 +4,31 @@
     <title>Генератор кодов</title>
     <style>
         body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .code { background: #f5f5f5; padding: 15px; margin: 20px 0; word-break: break-all; }
-        input[type="text"] { width: 100%; padding: 10px; margin: 10px 0; }
-        button { background: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; }
-        .error { color: red; }
+        .code { 
+            background: #f0f0f0; 
+            padding: 15px; 
+            margin: 20px 0; 
+            border-radius: 5px;
+            word-break: break-all;
+            font-family: monospace;
+        }
+        .error { color: #d9534f; margin: 10px 0; }
+        .success { color: #5cb85c; margin: 10px 0; }
+        button {
+            background: #337ab7;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -16,25 +37,26 @@
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
-                <div class="error">{{ message }}</div>
+                <div class="{{ category }}">{{ message }}</div>
             {% endfor %}
         {% endif %}
     {% endwith %}
     
     {% if code %}
         <div class="code">{{ code }}</div>
+        <p>Код успешно создан и сохранён!</p>
     {% endif %}
     
     <form method="POST">
-        <button type="submit" name="generate">Создать код</button>
+        <button type="submit" name="generate">Создать новый код</button>
     </form>
     
     <hr>
     
-    <h2>Вход по коду</h2>
+    <h2>Проверить код</h2>
     <form method="POST" action="/login">
         <input type="text" name="code" placeholder="Введите 64-символьный код" required>
-        <button type="submit">Войти</button>
+        <button type="submit">Проверить</button>
     </form>
 </body>
 </html>
