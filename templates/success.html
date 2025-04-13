@@ -1,31 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Успешный вход</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            text-align: center;
-        }
-        .code-display {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #f5f5f5;
-            border-radius: 5px;
-            word-break: break-all;
-            font-family: monospace;
-        }
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .code { background: #f5f5f5; padding: 15px; margin: 20px 0; word-break: break-all; }
     </style>
 </head>
 <body>
-    <h1>Успешный вход!</h1>
-    <p>Вы вошли по коду:</p>
-    <div class="code-display">{{ code }}</div>
-    <p><a href="{{ url_for('index') }}">Вернуться на главную</a></p>
+    <h1>Вход выполнен успешно!</h1>
+    <p>Использованный код:</p>
+    <div class="code">{{ code }}</div>
+    <p><a href="/">Вернуться на главную</a></p>
 </body>
 </html>
