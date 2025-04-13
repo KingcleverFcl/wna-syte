@@ -13,7 +13,6 @@
             font-family: monospace;
         }
         .error { color: #d9534f; margin: 10px 0; }
-        .success { color: #5cb85c; margin: 10px 0; }
         button {
             background: #337ab7;
             color: white;
@@ -44,11 +43,10 @@
     
     {% if code %}
         <div class="code">{{ code }}</div>
-        <p>Код успешно создан и сохранён!</p>
     {% endif %}
     
     <form method="POST">
-        <button type="submit" name="generate">Создать новый код</button>
+        <button type="submit" name="generate">Создать код</button>
     </form>
     
     <hr>
