@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Успешный вход</title>
+    <title>Успешная проверка</title>
     <style>
         body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .code { background: #f5f5f5; padding: 15px; margin: 20px 0; word-break: break-all; }
+        .code { 
+            background: #f0f0f0;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            word-break: break-all;
+            font-family: monospace;
+        }
+        .success { color: #5cb85c; }
     </style>
 </head>
 <body>
-    <h1>Вход выполнен успешно!</h1>
+    <h1 class="success">Код подтверждён!</h1>
     <p>Использованный код:</p>
     <div class="code">{{ code }}</div>
-    <p><a href="/">Вернуться на главную</a></p>
+    <p><a href="/">← Вернуться к генератору</a></p>
 </body>
 </html>
