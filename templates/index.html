@@ -1,48 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Генератор кодов</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            text-align: center;
-        }
-        .code-display {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #f5f5f5;
-            border-radius: 5px;
-            word-break: break-all;
-            font-family: monospace;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 10px 5px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .message {
-            color: red;
-            margin: 10px 0;
-        }
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .code { background: #f5f5f5; padding: 15px; margin: 20px 0; word-break: break-all; }
+        input[type="text"] { width: 100%; padding: 10px; margin: 10px 0; }
+        button { background: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+        .error { color: red; }
     </style>
 </head>
 <body>
@@ -51,25 +16,24 @@
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
-                <div class="message">{{ message }}</div>
+                <div class="error">{{ message }}</div>
             {% endfor %}
         {% endif %}
     {% endwith %}
     
     {% if code %}
-        <div class="code-display">{{ code }}</div>
-        <p>Код сохранён в базе данных. Используйте его для входа.</p>
+        <div class="code">{{ code }}</div>
     {% endif %}
     
-    <form method="post">
+    <form method="POST">
         <button type="submit" name="generate">Создать код</button>
     </form>
     
     <hr>
     
-    <h2>Войти по коду</h2>
-    <form method="post" action="{{ url_for('login') }}">
-        <input type="text" name="code" placeholder="Введите ваш 64-символьный код" required>
+    <h2>Вход по коду</h2>
+    <form method="POST" action="/login">
+        <input type="text" name="code" placeholder="Введите 64-символьный код" required>
         <button type="submit">Войти</button>
     </form>
 </body>
